@@ -31,7 +31,7 @@
                     <label class="block text-sm font-medium text-gray-700">Метка</label>
                     <input
                         :value="formatLabels(account.labels)"
-                        @input="updateLabels(account.id, $event.target.value)"
+                        @input="handleLabelInput(account.id, $event)"
                         @blur="validateAccount(account)"
                         placeholder="Введите метки через ;"
                         class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
@@ -45,7 +45,7 @@
                     <label class="block text-sm font-medium text-gray-700">Тип записи *</label>
                     <select
                         :value="account.accountType"
-                        @change="updateAccountType(account.id, $event.target.value)"
+                        @change="handleAccountTypeChange(account.id, $event)"
                         class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
                     >
                         <option value="LDAP">LDAP</option>
@@ -58,7 +58,7 @@
                     <label class="block text-sm font-medium text-gray-700">Логин *</label>
                     <input
                         :value="account.login"
-                        @input="updateLogin(account.id, $event.target.value)"
+                        @input="handleLoginInput(account.id, $event)"
                         @blur="validateAccount(account)"
                         :class="[
                         'w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-2',
@@ -76,7 +76,7 @@
                     <input
                     type="password"
                     :value="account.password || ''"
-                    @input="updatePassword(account.id, $event.target.value)"
+                    @input="handlePasswordInput(account.id, $event)"
                     @blur="validateAccount(account)"
                     :class="[
                         'w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-2',
@@ -115,7 +115,6 @@ import type { Account } from '../stores/accounts'
 const accountsStore = useAccountsStore()
 const { accounts } = storeToRefs(accountsStore)
 
-// Методы store используем напрямую из экземпляра
 const { 
   addAccount: storeAddAccount, 
   removeAllAccounts: storeRemoveAllAccounts, 
@@ -166,5 +165,25 @@ const formatLabels = (labels: { text: string }[]): string => {
   return storeFormatLabels(labels)
 }
 
+
+const handleLabelInput = (id: string, event: Event) => {
+  const value = (event.target as HTMLInputElement).value
+  updateLabels(id, value)
+}
+
+const handleAccountTypeChange = (id: string, event: Event) => {
+  const value = (event.target as HTMLSelectElement).value as 'LDAP' | 'Локальная'
+  updateAccountType(id, value)
+}
+
+const handleLoginInput = (id: string, event: Event) => {
+  const value = (event.target as HTMLInputElement).value
+  updateLogin(id, value)
+}
+
+const handlePasswordInput = (id: string, event: Event) => {
+  const value = (event.target as HTMLInputElement).value
+  updatePassword(id, value)
+}
 
 </script>
