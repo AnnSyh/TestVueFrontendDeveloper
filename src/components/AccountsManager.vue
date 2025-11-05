@@ -120,7 +120,6 @@
 <script setup lang="ts">
 import { ref } from 'vue'
 import { storeToRefs } from 'pinia'
-import { computed } from 'vue'
 import { useAccountsStore } from '../stores/accounts'
 import type { Account } from '../stores/accounts'
 
@@ -166,8 +165,6 @@ const {
   formatLabels
 } = accountsStore
 
-// Компьютированные свойства
-const hasDrafts = computed(() => draftAccounts.value.length > 0)
 
 // Методы
 const isDraft = (id: string): boolean => {
