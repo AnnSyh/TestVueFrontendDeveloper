@@ -127,12 +127,18 @@ import type { Account } from '../stores/accounts'
 const labelsRawMap = ref<Record<string, string>>({})
 
 const getLabelsRaw = (id: string): string => {
-  if (labelsRawMap.value[id] !== undefined) {
-    return labelsRawMap.value[id]
+  // Проверяем наличие в локальном хранилище
+  const rawValue = labelsRawMap.value[id]
+  if (rawValue !== undefined && rawValue !== null) {
+    return rawValue
   }
   // Инициализируем из существующих данных
   const account = accounts.value.find(acc => acc.id === id)
-  return account ? formatLabels(account.labels) : ''
+  if (account && account.labels) {
+    return formatLabels(account.labels)
+  }
+  // Всегда возвращаем строку по умолчанию
+    return ''
 }
 
 const handleLabelInput = (id: string, event: Event) => {
